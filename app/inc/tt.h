@@ -6,9 +6,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-// #define BOARD_SIZE (3 * 3)
-#define N_VALUES_PER_CARD 4
-
 
 enum tt_constants {
     TTC_N_ROWS         = 3,
@@ -16,6 +13,15 @@ enum tt_constants {
     TTC_MAX_HAND_SIZE  = 5,
     TTC_CARD_LIST_SIZE = 11,
     TTC_EMPTY_CARD     = 0xFF
+};
+
+enum tt_error {
+    TT_Err_Ok,
+    TT_Err_Range_High,
+    TT_Err_Range_Low,
+    TT_Err_Space_Occupied,
+    TT_Err_Hand_Empty,
+    TT_Err_Count
 };
 
 enum tt_game_state {
@@ -58,10 +64,19 @@ enum tt_rules {
 };
 
 
+enum tt_card_pos {
+    TT_Pos_Up,
+    TT_Pos_Right,
+    TT_Pos_Down,
+    TT_Pos_Left,
+    TT_Pos_Count
+};
+
+
 struct tt_card {
     uint8_t           level;
     const char*       name;
-    uint8_t           values[N_VALUES_PER_CARD]; // U, R, L, D
+    uint8_t           values[TT_Pos_Count]; // U, R, D, L
     enum tt_elem_type elem;
 };
 
@@ -80,24 +95,31 @@ struct tt_board {
     enum tt_player_type card_owners[TTC_N_ROWS * TTC_N_COLS];
     enum tt_game_state  state;
     uint8_t last_card_added;
+    uint8_t           last_neighbours[TT_Pos_Count];
     bool check_pending;
+};
+
+struct tt_score {
+    uint8_t a, b;
 };
 
 
 void                  tt_init(void);
 const uint8_t*        tt_board_state(void);
 enum tt_player_type   tt_curr_player_turn(void);
+struct tt_score       tt_get_score(void);
 bool                  tt_game_over(void);
 bool                  tt_update_game(void);
 const char*           tt_get_card_name(uint8_t card_index);
 const struct tt_card* tt_get_player_cards(enum tt_player_type player);
 void                  tt_set_player_hand(enum tt_player_type player, const uint8_t idxs[TTC_MAX_HAND_SIZE]);
 const uint8_t*        tt_get_player_hand(enum tt_player_type player, uint8_t* size);
-bool                  tt_place_card(enum tt_player_type player, uint8_t card_idx, uint8_t board_x, uint8_t board_y);
+bool                  tt_place_card(enum tt_player_type player, uint8_t hand_idx, uint8_t board_x, uint8_t board_y);
 
 
 void tt_print_hand(enum tt_player_type player);
 void tt_print_board(void);
+
 
 
 #endif /* TT_H_ */

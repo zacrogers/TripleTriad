@@ -6,8 +6,8 @@
 
 
 void run_tests(
-    uint8_t player_start_hand[5],
-    uint8_t enemy_start_hand[5],
+    uint8_t player_start_hand[TTC_MAX_HAND_SIZE],
+    uint8_t enemy_start_hand[TTC_MAX_HAND_SIZE],
     uint8_t player_moves[N_MOVES][3],
     uint8_t enemy_moves[N_MOVES][3]
 )
@@ -21,13 +21,17 @@ void run_tests(
     tt_print_hand(TT_PLAYER_A);
     tt_print_hand(TT_PLAYER_B);
 
+    int hand_pos = 0, board_x = 0, board_y = 0;
+
     for(uint8_t move = 0; move < N_MOVES; ++move)
     {
         for(uint8_t turn = 0; turn < 2; ++ turn)
         {
             if(TT_PLAYER_A == turn)
             {
-                int hand_pos = player_moves[move][0], board_x = player_moves[move][1], board_y = player_moves[move][2];
+                hand_pos = player_moves[move][0];
+                board_x = player_moves[move][1];
+                board_y = player_moves[move][2];
                 uint8_t s = 0;
                 const uint8_t* curr_hand = tt_get_player_hand(turn, &s);
                 uint8_t selected_card_idx = curr_hand[hand_pos];
@@ -43,7 +47,9 @@ void run_tests(
             }
             if(TT_PLAYER_B == turn)
             {
-                int hand_pos = enemy_moves[move][0], board_x = enemy_moves[move][1], board_y = enemy_moves[move][2];
+                hand_pos = enemy_moves[move][0];
+                board_x = enemy_moves[move][1];
+                board_y = enemy_moves[move][2];
                 uint8_t s = 0;
                 const uint8_t* curr_hand = tt_get_player_hand(turn, &s);
                 uint8_t selected_card_idx = curr_hand[hand_pos];
@@ -58,17 +64,16 @@ void run_tests(
                 }
             }
 
+            struct tt_score score = tt_get_score();
+            printf("Score: (%d|%d)\n", score.a, score.b);
             tt_print_hand(TT_PLAYER_A);
             tt_print_hand(TT_PLAYER_B);
             tt_print_board();
 
-            if(tt_update_game())
+            while(tt_update_game())
             {
+                // get new state
                 printf("Updated\n");
-            }
-            else
-            {
-                printf("Not updated\n");
             }
         }
     }
