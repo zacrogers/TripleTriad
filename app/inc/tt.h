@@ -6,10 +6,17 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define BOARD_SIZE (3 * 3)
-#define HAND_SIZE 5
+// #define BOARD_SIZE (3 * 3)
 #define N_VALUES_PER_CARD 4
 
+
+enum tt_constants {
+    TTC_N_ROWS         = 3,
+    TTC_N_COLS         = 3,
+    TTC_MAX_HAND_SIZE  = 5,
+    TTC_CARD_LIST_SIZE = 11,
+    TTC_EMPTY_CARD     = 0xFF
+};
 
 enum tt_game_state {
     StateSelectHand,
@@ -19,8 +26,10 @@ enum tt_game_state {
     StateMatchFinished
 };
 
-enum tt_constants {
-    TTC_
+enum tt_player_type {
+    TT_PLAYER_A    = 0,
+    TT_PLAYER_B    = 1,
+    TT_PLAYER_NONE = 2
 };
 
 enum tt_elem_type {
@@ -35,49 +44,57 @@ enum tt_elem_type {
     TT_Elem_None
 };
 
+enum tt_rules {
+    TT_R_Open,
+    TT_R_Same,
+    TT_R_SameWall,
+    TT_R_SuddenDeath,
+    TT_R_Random,
+    TT_R_Plus,
+    TT_R_Combo,
+    TT_R_Elemental,
+    TT_R_Retry,
+    TT_R_None
+};
+
 
 struct tt_card {
-    uint8_t level;
-    const char* name;
-    uint8_t values[N_VALUES_PER_CARD]; // U, R, L, D
+    uint8_t           level;
+    const char*       name;
+    uint8_t           values[N_VALUES_PER_CARD]; // U, R, L, D
     enum tt_elem_type elem;
 };
 
 
 struct tt_player {
-    uint8_t hand[HAND_SIZE];
+    uint8_t hand[TTC_MAX_HAND_SIZE];
     uint8_t hand_size;
+    uint8_t points;
 };
-
 
 
 struct tt_board {
-    struct tt_player player_a;
-    struct tt_player player_b;
-    bool player_turn;
-    uint8_t   cards[BOARD_SIZE];
-    enum tt_game_state state;
+    struct tt_player    player[2];
+    enum tt_player_type player_turn;
+    uint8_t             cards[TTC_N_ROWS * TTC_N_COLS];
+    enum tt_game_state  state;
 };
 
 
-extern const struct tt_card card_master_list[];
-
-
 void                  tt_init(void);
-void tt_board_state();
-const struct tt_card* tt_get_user_cards(void);
-void                  tt_set_user_hand(const uint8_t idxs[HAND_SIZE]);
-const uint8_t*        tt_get_user_hand(uint8_t* size);
-void                  tt_place_card(uint8_t card_idx, uint8_t board_x, uint8_t board_y);
+void                  tt_board_state(void);
+enum tt_player_type   tt_curr_player_turn(void);
+bool                  tt_game_over(void);
+bool                  tt_update_game(void);
+const char*           tt_get_card_name(uint8_t card_index);
+const struct tt_card* tt_get_player_cards(enum tt_player_type player);
+void                  tt_set_player_hand(enum tt_player_type player, const uint8_t idxs[TTC_MAX_HAND_SIZE]);
+const uint8_t*        tt_get_player_hand(enum tt_player_type player, uint8_t* size);
+bool                  tt_place_card(enum tt_player_type player, uint8_t card_idx, uint8_t board_x, uint8_t board_y);
 
 
-void tt_print_hand(void);
+void tt_print_hand(enum tt_player_type player);
 void tt_print_board(void);
-
-// {
-//     printf("Starting Triple Triad!\n");
-// }
-
 
 
 #endif /* TT_H_ */
