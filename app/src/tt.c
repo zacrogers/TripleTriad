@@ -6,7 +6,7 @@
 static struct tt_board board = { 0 };
 
 
-static const struct tt_card card_master_list[] = {
+static const struct tt_card card_master_list[0xFF] = {
 // Level 1
     {1, "Geezard",        {1, 4, 1, 5}, TT_Elem_None},
     {1, "Funguar",        {5, 1, 1, 3}, TT_Elem_None},
@@ -18,7 +18,8 @@ static const struct tt_card card_master_list[] = {
     {1, "Fastitocalon-F", {3, 5, 2, 1}, TT_Elem_Earth},
     {1, "Blood Soul",     {2, 1, 6, 1}, TT_Elem_None},
     {1, "Caterchipillar", {4, 2, 4, 3}, TT_Elem_None},
-    {1, "Cockatrice",     {2, 1, 2, 6}, TT_Elem_Lightning}
+    {1, "Cockatrice",     {2, 1, 2, 6}, TT_Elem_Lightning},
+    [0xFE] = {1, "None",     {1, 1, 1, 1}, TT_Elem_None}
 
 // Level 2
 };
@@ -53,6 +54,11 @@ static void remove_element(uint8_t *array, size_t length, size_t index)
 
     // Optional: Set the last element to 0 (or a specific value)
     array[length - 1] = 0;
+}
+
+static void check_neigbours()
+{
+    struct tt_card card = card_master_list[board.last_card_added];
 }
 
 
@@ -140,7 +146,6 @@ struct tt_score tt_get_score(void)
 }
 
 
-
 bool tt_game_over(void)
 {
     for(uint8_t i = 0; i < TTC_N_ROWS * TTC_N_COLS; ++i)
@@ -160,17 +165,50 @@ bool rule_active(enum tt_rules rule)
 }
 
 
+static void update_board_state(void)
+{
+    const struct tt_card last_card  = card_master_list[board.last_card_added];
+    const enum tt_player_type owner = board.card_owners[board.last_card_added];
+
+    const struct tt_card up    = card_master_list[board.cards[board.last_neighbours[TT_Pos_Up]]];
+    const struct tt_card right = card_master_list[board.cards[board.last_neighbours[TT_Pos_Right]]];
+    const struct tt_card down  = card_master_list[board.cards[board.last_neighbours[TT_Pos_Down]]];
+    const struct tt_card left  = card_master_list[board.cards[board.last_neighbours[TT_Pos_Left]]];
+
+    if(last_card.values[TT_Pos_Up] > up.values[TT_Pos_Down])
+    {
+        board.card_owners[board.last_neighbours[TT_Pos_Up]] = owner;
+    }
+
+    if(last_card.values[TT_Pos_Right] > up.values[TT_Pos_Left])
+    {
+        board.card_owners[board.last_neighbours[TT_Pos_Right]] = owner;
+    }
+
+    if(last_card.values[TT_Pos_Down] > up.values[TT_Pos_Up])
+    {
+        board.card_owners[board.last_neighbours[TT_Pos_Down]] = owner;
+    }
+
+    if(last_card.values[TT_Pos_Left] > up.values[TT_Pos_Right])
+    {
+        board.card_owners[board.last_neighbours[TT_Pos_Left]] = owner;
+    }
+}
+
+
 bool tt_update_game(void)
 {
     if(board.check_pending)
     {
+
         printf("%d\n", board.last_card_added);
 
         if(rule_active(TT_R_Combo))
         {
-
             board.check_pending = true;
         }
+        update_board_state();
 
         board.check_pending = false;
         return true;
@@ -178,7 +216,6 @@ bool tt_update_game(void)
 
     return false;
 }
-
 
 
 const char* tt_get_card_name(uint8_t card_index)
