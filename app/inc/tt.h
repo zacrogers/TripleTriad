@@ -82,7 +82,7 @@ struct tt_board {
 
 
 void                  tt_init(void);
-void                  tt_board_state(void);
+const uint8_t*        tt_board_state(void);
 enum tt_player_type   tt_curr_player_turn(void);
 bool                  tt_game_over(void);
 bool                  tt_update_game(void);

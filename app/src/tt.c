@@ -41,6 +41,13 @@ void tt_init()
     }
 }
 
+
+const uint8_t* tt_board_state(void)
+{
+    return board.cards;
+}
+
+
 enum tt_player_type tt_curr_player_turn(void)
 {
     return board.player_turn;
