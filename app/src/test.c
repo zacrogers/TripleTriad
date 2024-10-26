@@ -13,6 +13,7 @@ void run_tests(
 )
 {
     tt_init(); // Initialise the board
+    // tt_set_start_player(TT_PLAYER_B); // Initialise the board
 
     printf("Select your hand...\n");
     tt_set_player_hand(TT_PLAYER_A, player_start_hand);
@@ -25,7 +26,7 @@ void run_tests(
 
     for(uint8_t move = 0; move < N_MOVES; ++move)
     {
-        for(uint8_t turn = 0; turn < 2; ++ turn)
+        for(uint8_t turn = 0; turn < 2; ++turn)
         {
             if(TT_PLAYER_A == turn)
             {
@@ -72,6 +73,7 @@ void run_tests(
 
             while(tt_update_game())
             {
+                const uint8_t* curr_board_state = tt_board_state();
                 // get new state
                 printf("Updated\n");
             }

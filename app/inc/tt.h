@@ -12,7 +12,7 @@ enum tt_constants {
     TTC_N_COLS         = 3,
     TTC_MAX_HAND_SIZE  = 5,
     TTC_CARD_LIST_SIZE = 11,
-    TTC_EMPTY_CARD     = 0xFF
+    TTC_EMPTY_CARD     = 0xFE
 };
 
 enum tt_error {
@@ -88,23 +88,29 @@ struct tt_player {
 };
 
 
+struct tt_card_cell {
+    enum tt_player_type owner;
+    uint8_t master_idx;
+};
+
 struct tt_board {
     struct tt_player    player[2];
     enum tt_player_type player_turn;
-    uint8_t             cards[TTC_N_ROWS * TTC_N_COLS];
-    enum tt_player_type card_owners[TTC_N_ROWS * TTC_N_COLS];
+    struct tt_card_cell cards[TTC_N_ROWS * TTC_N_COLS];
     enum tt_game_state  state;
-    uint8_t last_card_added;
-    uint8_t           last_neighbours[TT_Pos_Count];
+    uint8_t             last_card_board_idx;
+    uint8_t             last_neigh_idxs[TT_Pos_Count];
     bool check_pending;
 };
+
 
 struct tt_score {
     uint8_t a, b;
 };
 
 
-void                  tt_init(void);
+void                  tt_init();
+void                  tt_set_start_player(enum tt_player_type player);
 const uint8_t*        tt_board_state(void);
 enum tt_player_type   tt_curr_player_turn(void);
 struct tt_score       tt_get_score(void);
