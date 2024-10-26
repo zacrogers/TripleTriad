@@ -77,7 +77,10 @@ struct tt_board {
     struct tt_player    player[2];
     enum tt_player_type player_turn;
     uint8_t             cards[TTC_N_ROWS * TTC_N_COLS];
+    enum tt_player_type card_owners[TTC_N_ROWS * TTC_N_COLS];
     enum tt_game_state  state;
+    uint8_t last_card_added;
+    bool check_pending;
 };
 
 

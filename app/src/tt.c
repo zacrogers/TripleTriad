@@ -38,6 +38,7 @@ void tt_init()
     for(uint8_t i = 0; i < (TTC_N_ROWS * TTC_N_COLS); ++i)
     {
         board.cards[i] = TTC_EMPTY_CARD;
+        board.card_owners[i] = TT_PLAYER_NONE;;
     }
 }
 
@@ -62,6 +63,13 @@ bool tt_game_over(void)
 
 bool tt_update_game(void)
 {
+    if(board.check_pending)
+    {
+        printf("%d\n", board.last_card_added);
+
+        board.check_pending = false;
+    }
+
     return false;
 }
 
@@ -115,9 +123,9 @@ bool tt_place_card(enum tt_player_type player, uint8_t card_idx, uint8_t board_x
 {
 
     if((board.player[player].hand_size > TTC_MAX_HAND_SIZE) ||
-    (board_x > TTC_N_ROWS) ||
-    (board_y > TTC_N_COLS) ||
-    (card_idx > board.player[player].hand_size))
+        (board_x > TTC_N_ROWS) ||
+        (board_y > TTC_N_COLS) ||
+        (card_idx > board.player[player].hand_size))
     {
         return false;
     }
@@ -129,9 +137,13 @@ bool tt_place_card(enum tt_player_type player, uint8_t card_idx, uint8_t board_x
 
     if(board.player[player].hand_size > 0)
     {
-        board.cards[board_y * TTC_N_COLS + board_x] = board.player[player].hand[card_idx];
+        int idx = board_y * TTC_N_COLS + board_x;
+        board.last_card_added = idx;
+        board.cards[idx] = board.player[player].hand[card_idx];
+        board.card_owners[idx] = player;
         remove_element(board.player[player].hand, board.player[player].hand_size, card_idx);
         board.player[player].hand_size--;
+        board.check_pending = true;
         return true;
     }
 
@@ -158,7 +170,7 @@ void tt_print_board(void)
         printf("\t[");
         for(uint8_t x = 0; x < TTC_N_COLS; ++x)
         {
-            printf("%d,", board.cards[y * TTC_N_COLS + x]);
+            printf("(%d:%d),", board.card_owners[y * TTC_N_COLS + x], board.cards[y * TTC_N_COLS + x]);
         }
         printf("]\n");
     }

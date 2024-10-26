@@ -9,6 +9,6 @@ include_directories (
 
 add_executable(TripleTriadCore
     src/tt.c
+    src/test.c
     src/main.c
-    # ../emu_core/src/cpu.cpp
 )
