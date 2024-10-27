@@ -12,3 +12,11 @@ add_executable(TripleTriadCore
     src/tt_sim.c
     src/main.c
 )
+
+
+# add_library(stuff
+#   src/stuff.c
+# )
+
+# target_include_directories(stuff PUBLIC include)
+# target_link_libraries(stuff common)

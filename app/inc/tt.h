@@ -91,8 +91,8 @@ struct tt_hand {
 
 struct tt_card_cell {
     enum tt_player_type owner;
-    uint8_t master_id;
-    enum tt_elem_type elem;
+    uint8_t             master_id;
+    enum tt_elem_type   elem;
 };
 
 
@@ -108,7 +108,6 @@ struct tt_board {
     enum tt_game_state  state;
     struct tt_score     score;
 };
-
 
 void                   tt_board_init(enum tt_player_type start_player);
 const struct tt_board* tt_board_state(void);
@@ -126,7 +125,6 @@ const uint8_t*         tt_get_hand(enum tt_player_type player, uint8_t* size);
 
 void tt_print_hand(enum tt_player_type player);
 void tt_print_board(void);
-
 
 
 #endif /* TT_H_ */

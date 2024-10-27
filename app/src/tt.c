@@ -231,23 +231,23 @@ const char* tt_board_state_json(void)
 {
     static char buf[350];
     sprintf(buf,
-            "{\"turn\":\"%c\","
+            "{\"turn\":%d,"
             "\"score\":[%d,%d],"
             "\"handA\":[%d,%d,%d,%d,%d],"
             "\"handB\":[%d,%d,%d,%d,%d],"
-            "\"cards\":["
-            "{\"o\":\"%c\",\"id\":%d,\"e\":%d},"
-            "{\"o\":\"%c\",\"id\":%d,\"e\":%d},"
-            "{\"o\":\"%c\",\"id\":%d,\"e\":%d},"
-            "{\"o\":\"%c\",\"id\":%d,\"e\":%d},"
-            "{\"o\":\"%c\",\"id\":%d,\"e\":%d},"
-            "{\"o\":\"%c\",\"id\":%d,\"e\":%d},"
-            "{\"o\":\"%c\",\"id\":%d,\"e\":%d},"
-            "{\"o\":\"%c\",\"id\":%d,\"e\":%d},"
-            "{\"o\":\"%c\",\"id\":%d,\"e\":%d}"
+            "\"board\":["
+            "{\"o\":%d,\"id\":%d,\"e\":%d},"
+            "{\"o\":%d,\"id\":%d,\"e\":%d},"
+            "{\"o\":%d,\"id\":%d,\"e\":%d},"
+            "{\"o\":%d,\"id\":%d,\"e\":%d},"
+            "{\"o\":%d,\"id\":%d,\"e\":%d},"
+            "{\"o\":%d,\"id\":%d,\"e\":%d},"
+            "{\"o\":%d,\"id\":%d,\"e\":%d},"
+            "{\"o\":%d,\"id\":%d,\"e\":%d},"
+            "{\"o\":%d,\"id\":%d,\"e\":%d}"
             "]"
             "}",
-            (board.player_turn == TT_PLAYER_A) ? 'A' : 'B',
+            board.player_turn,
             board.score.a,
             board.score.b,
             board.hand[TT_PLAYER_A].values[0],
@@ -260,31 +260,31 @@ const char* tt_board_state_json(void)
             board.hand[TT_PLAYER_B].values[2],
             board.hand[TT_PLAYER_B].values[3],
             board.hand[TT_PLAYER_B].values[4],
-            player_type_to_char(board.cards[0].owner),
+            board.cards[0].owner,
             board.cards[0].master_id,
             board.cards[0].elem,
-            player_type_to_char(board.cards[1].owner),
+            board.cards[1].owner,
             board.cards[1].master_id,
             board.cards[1].elem,
-            player_type_to_char(board.cards[2].owner),
+            board.cards[2].owner,
             board.cards[2].master_id,
             board.cards[2].elem,
-            player_type_to_char(board.cards[3].owner),
+            board.cards[3].owner,
             board.cards[3].master_id,
             board.cards[3].elem,
-            player_type_to_char(board.cards[4].owner),
+            board.cards[4].owner,
             board.cards[4].master_id,
             board.cards[4].elem,
-            player_type_to_char(board.cards[5].owner),
+            board.cards[5].owner,
             board.cards[5].master_id,
             board.cards[5].elem,
-            player_type_to_char(board.cards[6].owner),
+            board.cards[6].owner,
             board.cards[6].master_id,
             board.cards[6].elem,
-            player_type_to_char(board.cards[7].owner),
+            board.cards[7].owner,
             board.cards[7].master_id,
             board.cards[7].elem,
-            player_type_to_char(board.cards[8].owner),
+            board.cards[8].owner,
             board.cards[8].master_id,
             board.cards[8].elem
     );
@@ -353,9 +353,9 @@ bool tt_place_card(enum tt_player_type player, uint8_t hand_idx, uint8_t board_x
     {
         const int board_idx = board_y * TTC_N_COLS + board_x;
 
-        last_card_board_idx               = board_idx;
+        last_card_board_idx              = board_idx;
         board.cards[board_idx].master_id = board.hand[player].values[hand_idx];
-        board.cards[board_idx].owner      = player;
+        board.cards[board_idx].owner     = player;
 
         remove_card_from_hand(board.hand[player].values, board.hand[player].size, hand_idx);
         board.hand[player].size--;
