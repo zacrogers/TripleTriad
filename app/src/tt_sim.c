@@ -32,37 +32,27 @@ void run_simulation(
                 hand_pos = player_moves[move][0];
                 board_x = player_moves[move][1];
                 board_y = player_moves[move][2];
-                uint8_t s = 0;
-                const uint8_t* curr_hand = tt_get_hand(turn, &s);
-                uint8_t selected_card_idx = curr_hand[hand_pos];
-
-                if(tt_place_card(turn, hand_pos, board_x, board_y))
-                {
-                    printf("Placed: %s\n", tt_get_card_name(selected_card_idx));
-                }
-                else
-                {
-                    printf("Failed to place card\n");
-                }
             }
             if(TT_PLAYER_B == turn)
             {
                 hand_pos = enemy_moves[move][0];
                 board_x = enemy_moves[move][1];
                 board_y = enemy_moves[move][2];
-                uint8_t s = 0;
-                const uint8_t* curr_hand = tt_get_hand(turn, &s);
-                uint8_t selected_card_idx = curr_hand[hand_pos];
-
-                if(tt_place_card(turn, hand_pos, board_x, board_y))
-                {
-                    printf("Placed: %s\n", tt_get_card_name(selected_card_idx));
-                }
-                else
-                {
-                    printf("Failed to place card\n");
-                }
             }
+
+            uint8_t s = 0;
+            const uint8_t* curr_hand = tt_get_hand(turn, &s);
+            uint8_t selected_card_idx = curr_hand[hand_pos];
+
+            if(tt_place_card(turn, hand_pos, board_x, board_y))
+            {
+                printf("Placed: %s\n", tt_get_card_name(selected_card_idx));
+            }
+            else
+            {
+                printf("Failed to place card\n");
+            }
+
             while(tt_update_game())
             {
                 printf("Updated\n");
