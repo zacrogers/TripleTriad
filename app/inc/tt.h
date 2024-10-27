@@ -20,7 +20,9 @@ enum tt_error {
     TT_Err_Hand_Range,
     TT_Err_Master_Range,
     TT_Err_Cell_Occupied,
+    TT_Err_Board_Bounds,
     TT_Err_Hand_Empty,
+    TT_Err_Unknown,
     TT_Err_Count
 };
 
@@ -65,7 +67,7 @@ enum tt_rules {
     TT_R_None
 };
 
-
+// For tracking neighs, and also card val locations
 enum tt_card_pos {
     TT_Pos_Up,
     TT_Pos_Right,
@@ -116,15 +118,12 @@ bool                   tt_update_game(void);
 
 const char*            tt_get_card_name(uint8_t card_index);
 const struct tt_card*  tt_get_card(uint8_t card_index);
-bool                   tt_place_card(enum tt_player_type player, uint8_t hand_idx, uint8_t board_x, uint8_t board_y);
+enum tt_error          tt_place_card(enum tt_player_type player, uint8_t hand_idx, uint8_t board_x, uint8_t board_y);
 
 const struct tt_card*  tt_get_player_cards(enum tt_player_type player);
 void                   tt_set_hand(enum tt_player_type player, const uint8_t idxs[TTC_MAX_HAND_SIZE]);
 const uint8_t*         tt_get_hand(enum tt_player_type player, uint8_t* size);
 
-
-void tt_print_hand(enum tt_player_type player);
-void tt_print_board(void);
 
 
 #endif /* TT_H_ */

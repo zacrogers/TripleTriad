@@ -1,9 +1,12 @@
-#ifndef TEST_H_
-#define TEST_H_
+#ifndef _TT_SIM_H_
+#define _TT_SIM_H_
 
 #include "../inc/tt.h"
 
 #define N_MOVES 4
+
+void sim_init(const char* moves_fname);
+void sim_run(void);
 
 void run_simulation(
     uint8_t player_start_hand[TTC_MAX_HAND_SIZE],
@@ -12,4 +15,4 @@ void run_simulation(
     uint8_t enemy_moves[N_MOVES][3]
 );
 
-#endif  /* TEST_H_ */
+#endif  /* _TT_SIM_H_ */
