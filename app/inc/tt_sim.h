@@ -1,10 +1,11 @@
 #ifndef TEST_H_
 #define TEST_H_
 
+#include "../inc/tt.h"
 
 #define N_MOVES 4
 
-void run_tests(
+void run_simulation(
     uint8_t player_start_hand[TTC_MAX_HAND_SIZE],
     uint8_t rival_start_hand[TTC_MAX_HAND_SIZE],
     uint8_t player_moves[N_MOVES][3],

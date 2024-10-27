@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <stdint.h>
 
-#include "../inc/tt.h"
-#include "../inc/test.h"
+
+#include "../inc/tt_sim.h"
 
 
-void run_tests(
+void run_simulation(
     uint8_t player_start_hand[TTC_MAX_HAND_SIZE],
     uint8_t enemy_start_hand[TTC_MAX_HAND_SIZE],
     uint8_t player_moves[N_MOVES][3],

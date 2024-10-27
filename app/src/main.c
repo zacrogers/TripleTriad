@@ -2,7 +2,7 @@
 #include <stdint.h>
 
 #include "../inc/tt.h"
-#include "../inc/test.h"
+#include "../inc/tt_sim.h"
 
 // The hand the player starts with
 uint8_t player_start_hand[TTC_MAX_HAND_SIZE] = {1, 2, 3, 4, 5};
@@ -27,6 +27,6 @@ uint8_t player_moves[N_MOVES][3] = {
 
 int main(void)
 {
-    run_tests(player_start_hand, enemy_start_hand, player_moves, enemy_moves);
+    run_simulation(player_start_hand, enemy_start_hand, player_moves, enemy_moves);
     return 0;
 }

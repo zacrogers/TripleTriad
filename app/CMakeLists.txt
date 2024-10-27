@@ -9,6 +9,6 @@ include_directories (
 
 add_executable(TripleTriadCore
     src/tt.c
-    src/test.c
+    src/tt_sim.c
     src/main.c
 )
