@@ -13,7 +13,6 @@ void run_tests(
 )
 {
     tt_init(); // Initialise the board
-    // tt_set_start_player(TT_PLAYER_B); // Initialise the board
 
     printf("Select your hand...\n");
     tt_set_player_hand(TT_PLAYER_A, player_start_hand);
@@ -21,6 +20,9 @@ void run_tests(
 
     tt_print_hand(TT_PLAYER_A);
     tt_print_hand(TT_PLAYER_B);
+
+    printf("Quadruple quartet!\n");
+    printf("\n%s\n", tt_board_state_json());
 
     int hand_pos = 0, board_x = 0, board_y = 0;
 
@@ -73,10 +75,12 @@ void run_tests(
 
             while(tt_update_game())
             {
-                const uint8_t* curr_board_state = tt_board_state();
+                // const uint8_t* curr_board_state = tt_board_state();
                 // get new state
                 printf("Updated\n");
             }
         }
     }
+
+    printf("\n%s\n", tt_board_state_json());
 }

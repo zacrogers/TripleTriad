@@ -17,9 +17,9 @@ enum tt_constants {
 
 enum tt_error {
     TT_Err_Ok,
-    TT_Err_Range_High,
-    TT_Err_Range_Low,
-    TT_Err_Space_Occupied,
+    TT_Err_Hand_Range,
+    TT_Err_Master_Range,
+    TT_Err_Cell_Occupied,
     TT_Err_Hand_Empty,
     TT_Err_Count
 };
@@ -38,6 +38,7 @@ enum tt_player_type {
     TT_PLAYER_NONE = 2
 };
 
+
 enum tt_elem_type {
     TT_Elem_Earth,
     TT_Elem_Fire,
@@ -49,6 +50,7 @@ enum tt_elem_type {
     TT_Elem_Ice,
     TT_Elem_None
 };
+
 
 enum tt_rules {
     TT_R_Open,
@@ -81,10 +83,9 @@ struct tt_card {
 };
 
 
-struct tt_player {
-    uint8_t hand[TTC_MAX_HAND_SIZE];
-    uint8_t hand_size;
-    uint8_t points;
+struct tt_hand {
+    uint8_t values[TTC_MAX_HAND_SIZE];
+    uint8_t size;
 };
 
 
@@ -93,13 +94,12 @@ struct tt_card_cell {
     uint8_t master_idx;
 };
 
+
 struct tt_board {
-    struct tt_player    player[2];
+    struct tt_hand    hand[2];
     enum tt_player_type player_turn;
     struct tt_card_cell cards[TTC_N_ROWS * TTC_N_COLS];
     enum tt_game_state  state;
-    uint8_t             last_card_board_idx;
-    uint8_t             last_neigh_idxs[TT_Pos_Count];
     bool check_pending;
 };
 
@@ -109,14 +109,16 @@ struct tt_score {
 };
 
 
-void                  tt_init();
+void                  tt_init(void);
 void                  tt_set_start_player(enum tt_player_type player);
-const uint8_t*        tt_board_state(void);
+const struct tt_board* tt_board_state(void);
+const char* tt_board_state_json(void);
 enum tt_player_type   tt_curr_player_turn(void);
 struct tt_score       tt_get_score(void);
 bool                  tt_game_over(void);
 bool                  tt_update_game(void);
 const char*           tt_get_card_name(uint8_t card_index);
+const struct tt_card* tt_get_card(uint8_t card_index);
 const struct tt_card* tt_get_player_cards(enum tt_player_type player);
 void                  tt_set_player_hand(enum tt_player_type player, const uint8_t idxs[TTC_MAX_HAND_SIZE]);
 const uint8_t*        tt_get_player_hand(enum tt_player_type player, uint8_t* size);
