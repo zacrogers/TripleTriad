@@ -12,6 +12,10 @@ include_directories (
     /src
 )
 
+## generate .dylib for importing into other languages
+add_library(TTCoreLib SHARED src/tt.c)
+
+
 add_executable(TripleTriadCore
 ${MY_SOURCES}
     src/tt.c
