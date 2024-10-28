@@ -66,7 +66,7 @@ void run_simulation(
     //     }
     // }
 
-    tt_board_init(TT_PLAYER_A);
+    tt_board_init(TT_PLAYER_A, 0);
 
     printf("Select your hand...\n");
     tt_set_hand(TT_PLAYER_A, player_start_hand);

@@ -11,9 +11,11 @@ enum tt_constants {
     TTC_N_ROWS         = 3,
     TTC_N_COLS         = 3,
     TTC_MAX_HAND_SIZE  = 5,
-    TTC_CARD_LIST_SIZE = 11,
     TTC_EMPTY_CARD_ID  = 0xFE
 };
+#define TTC_BOARD_SIZE (TTC_N_ROWS * TTC_N_COLS)
+
+
 
 enum tt_error {
     TT_Err_Ok,
@@ -26,6 +28,7 @@ enum tt_error {
     TT_Err_Count
 };
 
+
 enum tt_game_state {
     StateSelectHand,
     StateStartMatch,
@@ -33,6 +36,7 @@ enum tt_game_state {
     StateOpponentTurn,
     StateMatchFinished
 };
+
 
 enum tt_player_type {
     TT_PLAYER_A    = 0,
@@ -55,17 +59,19 @@ enum tt_elem_type {
 
 
 enum tt_rules {
-    TT_R_Open,
-    TT_R_Same,
-    TT_R_SameWall,
-    TT_R_SuddenDeath,
-    TT_R_Random,
-    TT_R_Plus,
-    TT_R_Combo,
-    TT_R_Elemental,
-    TT_R_Retry,
-    TT_R_None
+    TT_R_Open        = (0x01 << 0),
+    TT_R_Same        = (0x01 << 1),
+    TT_R_SameWall    = (0x01 << 2),
+    TT_R_SuddenDeath = (0x01 << 3),
+    TT_R_Random      = (0x01 << 4),
+    TT_R_Plus        = (0x01 << 5),
+    TT_R_Combo       = (0x01 << 6),
+    TT_R_Elemental   = (0x01 << 7),
+    TT_R_Retry       = (0x01 << 8),
+    TT_R_None        = (0x01 << 9)
 };
+
+typedef uint16_t rule_bitmask_t;
 
 // For tracking neighs, and also card val locations
 enum tt_card_pos {
@@ -86,7 +92,7 @@ struct tt_card {
 
 
 struct tt_hand {
-    uint8_t values[TTC_MAX_HAND_SIZE];
+    uint8_t ids[TTC_MAX_HAND_SIZE];
     uint8_t size;
 };
 
@@ -106,12 +112,14 @@ struct tt_score {
 struct tt_board {
     struct tt_hand      hand[2];
     enum tt_player_type player_turn;
-    struct tt_card_cell cards[TTC_N_ROWS * TTC_N_COLS];
+    struct tt_card_cell cards[TTC_BOARD_SIZE];
     enum tt_game_state  state;
     struct tt_score     score;
+    rule_bitmask_t      rules;
 };
 
-void                   tt_board_init(enum tt_player_type start_player);
+
+void                   tt_board_init(enum tt_player_type start_player, rule_bitmask_t rule_bitmask);
 const struct tt_board* tt_board_state(void);
 const char*            tt_board_state_json(void);
 bool                   tt_update_game(void);
@@ -125,22 +133,4 @@ void                   tt_set_hand(enum tt_player_type player, const uint8_t idx
 const uint8_t*         tt_get_hand(enum tt_player_type player, uint8_t* size);
 
 
-
 #endif /* TT_H_ */
-
-
-/*
-
-
--------------
-|   |   |   |
--------------
-|   |   |   |
--------------
-|   |   |   |
--------------
-
-
-
-
-*/

@@ -4,28 +4,6 @@
 
 import triple_triad as tt
 
-
-# JSON_SIM_DATA_PATH="../scripts/sim_data.json"
-
-# if __name__ == "__main__":
-
-#     sim_data = json.loads()
-
-#     tt.init_board()
-#     tt.set_hand(tt.TTPlayerType.TT_PLAYER_A, [1,2,3,4,5])
-
-#     s = tt.get_state()
-
-#     hand_names = [tt.get_card_name(c_id) for c_id in s.get("handA")]
-
-#     print(hand_names)
-
-#     pprint(s)
-#     tt.place_card(tt.TTPlayerType.TT_PLAYER_A, 0, 0, 0)
-
-#     pprint(tt.get_state())
-
-
 import pygame
 import sys
 clock = pygame.time.Clock()
@@ -33,10 +11,10 @@ clock = pygame.time.Clock()
 pygame.init()
 
 # Screen dimensions and setup
-SCREEN_WIDTH = 1200
-SCREEN_HEIGHT = 800
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 700
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Card Game Layout")
+pygame.display.set_caption("Triple Triad")
 
 # Colors
 GREEN_FELT = (34, 139, 34)  # Background color
@@ -100,8 +78,8 @@ images = []
 
 # Setup game
 tt.init_board()
-tt.set_hand(tt.TTPlayerType.TT_PLAYER_A, [1,2,3,4,5])
-tt.set_hand(tt.TTPlayerType.TT_PLAYER_B, [6, 7, 8, 9, 10])
+tt.set_hand(tt.TTPlayerType.TT_PLAYER_A, [11, 12, 13, 14, 15])
+tt.set_hand(tt.TTPlayerType.TT_PLAYER_B, [16, 17, 18, 19, 20])
 
 player_moves = [
     [0, 0, 0],

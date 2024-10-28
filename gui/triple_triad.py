@@ -25,6 +25,7 @@ class TTError(ctypes.c_int):
     TT_Err_Unknown = 6
     TT_Err_Count = 7
 
+
 # Set the argument types and return type for tt_set_hand
 lib.tt_set_hand.argtypes = [
     TTPlayerType,                  # First argument: enum tt_player_type
@@ -37,11 +38,13 @@ def get_card_name(card_index: int):
     return lib.tt_get_card_name(card_index).decode("utf-8").replace(" ", "").replace("-", "")
 
 
-def init_board():
-    lib.tt_board_init()
+def init_board(start_player: TTPlayerType=1, rules_bitmask: int=0):
+    lib.tt_board_init(start_player, rules_bitmask)
+
 
 def update_game():
     return lib.tt_update_game()
+
 
 def get_state():
     state = lib.tt_board_state_json()
