@@ -18,69 +18,134 @@ static bool            check_pending = false;
 
 static const struct tt_card card_master_list[0xFF] = {
 // Level 1
-    { 1, "Geezard",        {1, 4, 1, 5}, TT_Elem_None },
-    { 1, "Funguar",        {5, 1, 1, 3}, TT_Elem_None },
-    { 1, "Bite Bug",       {1, 3, 3, 5}, TT_Elem_None },
-    { 1, "Red Bat",        {6, 1, 1, 2}, TT_Elem_None },
-    { 1, "Blobra",         {2, 3, 1, 5}, TT_Elem_None },
-    { 1, "Gayla",          {2, 1, 4, 4}, TT_Elem_Lightning },
-    { 1, "Gesper",         {1, 5, 4, 1}, TT_Elem_None },
-    { 1, "Fastitocalon-F", {3, 5, 2, 1}, TT_Elem_Earth },
-    { 1, "Blood Soul",     {2, 1, 6, 1}, TT_Elem_None },
-    { 1, "Caterchipillar", {4, 2, 4, 3}, TT_Elem_None },
-    { 1, "Cockatrice",     {2, 1, 2, 6}, TT_Elem_Lightning },
+    { 1, "Geezard",        { 1, 4, 1, 5 },      TT_Elem_None },
+    { 1, "Funguar",        { 5, 1, 1, 3 },      TT_Elem_None },
+    { 1, "Bite Bug",       { 1, 3, 3, 5 },      TT_Elem_None },
+    { 1, "Red Bat",        { 6, 1, 1, 2 },      TT_Elem_None },
+    { 1, "Blobra",         { 2, 3, 1, 5 },      TT_Elem_None },
+    { 1, "Gayla",          { 2, 1, 4, 4 },      TT_Elem_Lightning },
+    { 1, "Gesper",         { 1, 5, 4, 1 },      TT_Elem_None },
+    { 1, "Fastitocalon-F", { 3, 5, 2, 1 },      TT_Elem_Earth },
+    { 1, "Blood Soul",     { 2, 1, 6, 1 },      TT_Elem_None },
+    { 1, "Caterchipillar", { 4, 2, 4, 3 },      TT_Elem_None },
+    { 1, "Cockatrice",     { 2, 1, 2, 6 },      TT_Elem_Lightning },
 
 // Level 2
-    { 2, "Grat",           {7, 1, 3, 1}, TT_Elem_None },
-    { 2, "Buel",           {6, 2, 2, 3}, TT_Elem_None },
-    { 2, "Mesmerize",      {5, 3, 3, 4}, TT_Elem_None },
-    { 2, "Glacial Eye",    {6, 1, 4, 3}, TT_Elem_Ice },
-    { 2, "Belhelmel",      {3, 4, 5, 3}, TT_Elem_None },
-    { 2, "Thrustaevis",    {5, 3, 2, 5}, TT_Elem_Wind },
-    { 2, "Anacondaur",     {5, 1, 3, 5}, TT_Elem_Poison },
-    { 2, "Creeps",         {5, 2, 5, 2}, TT_Elem_Lightning },
-    { 2, "Grendel",        {4, 4, 5, 2}, TT_Elem_Lightning },
-    { 2, "Jelleye",        {3, 2, 1, 7}, TT_Elem_None },
-    { 2, "Grand Mantis",   {5, 2, 5, 3}, TT_Elem_None },
+    { 2, "Grat",           { 7, 1, 3, 1 },      TT_Elem_None },
+    { 2, "Buel",           { 6, 2, 2, 3 },      TT_Elem_None },
+    { 2, "Mesmerize",      { 5, 3, 3, 4 },      TT_Elem_None },
+    { 2, "Glacial Eye",    { 6, 1, 4, 3 },      TT_Elem_Ice },
+    { 2, "Belhelmel",      { 3, 4, 5, 3 },      TT_Elem_None },
+    { 2, "Thrustaevis",    { 5, 3, 2, 5 },      TT_Elem_Wind },
+    { 2, "Anacondaur",     { 5, 1, 3, 5 },      TT_Elem_Poison },
+    { 2, "Creeps",         { 5, 2, 5, 2 },      TT_Elem_Lightning },
+    { 2, "Grendel",        { 4, 4, 5, 2 },      TT_Elem_Lightning },
+    { 2, "Jelleye",        { 3, 2, 1, 7 },      TT_Elem_None },
+    { 2, "Grand Mantis",   { 5, 2, 5, 3 },      TT_Elem_None },
 
 // Level 3
-    { 3, "Forbidden",      {6, 6, 3, 2}, TT_Elem_None },
-    { 3, "Armadodo",       {6, 3, 1, 6}, TT_Elem_Earth },
-    { 3, "Tri-Face",       {3, 5, 5, 5}, TT_Elem_Poison },
-    { 3, "Fastitocalon",   {7, 5, 1, 3}, TT_Elem_Earth },
-    { 3, "Snow Lion",      {7, 1, 5, 3}, TT_Elem_Ice },
-    { 3, "Ochu",           {5, 6, 3, 3}, TT_Elem_None },
-    { 3, "SAM08G",         {5, 6, 2, 4}, TT_Elem_Fire },
-    { 3, "Death Claw",     {4, 4, 7, 2}, TT_Elem_Fire },
-    { 3, "Cactuar",        {6, 2, 6, 3}, TT_Elem_None },
-    { 3, "Tonberry",       {3, 6, 4, 4}, TT_Elem_None },
-    { 3, "Abyss Worm",     {7, 2, 3, 5}, TT_Elem_Earth },
+    { 3, "Forbidden",      { 6, 6, 3, 2 },      TT_Elem_None },
+    { 3, "Armadodo",       { 6, 3, 1, 6 },      TT_Elem_Earth },
+    { 3, "Tri-Face",       { 3, 5, 5, 5 },      TT_Elem_Poison },
+    { 3, "Fastitocalon",   { 7, 5, 1, 3 },      TT_Elem_Earth },
+    { 3, "Snow Lion",      { 7, 1, 5, 3 },      TT_Elem_Ice },
+    { 3, "Ochu",           { 5, 6, 3, 3 },      TT_Elem_None },
+    { 3, "SAM08G",         { 5, 6, 2, 4 },      TT_Elem_Fire },
+    { 3, "Death Claw",     { 4, 4, 7, 2 },      TT_Elem_Fire },
+    { 3, "Cactuar",        { 6, 2, 6, 3 },      TT_Elem_None },
+    { 3, "Tonberry",       { 3, 6, 4, 4 },      TT_Elem_None },
+    { 3, "Abyss Worm",     { 7, 2, 3, 5 },      TT_Elem_Earth },
 
 // Level 4
-    { 4, "Turtapod",       {2, 3, 6, 7}, TT_Elem_None },
-    { 4, "Vysage",         {6, 5, 4, 5}, TT_Elem_None },
-    { 4, "T-Rexaur",       {4, 6, 2, 7}, TT_Elem_None },
-    { 4, "Bomb",           {7, 5, 1, 3}, TT_Elem_Fire },
-    { 4, "Blitz",          {1, 6, 4, 7}, TT_Elem_Lightning },
-    { 4, "Wendigo",        {7, 3, 1, 6}, TT_Elem_None },
-    { 4, "Torama",         {7, 4, 4, 4}, TT_Elem_None },
-    { 4, "Imp",            {3, 7, 3, 6}, TT_Elem_None },
-    { 4, "Blue Dragon",    {6, 2, 7, 3}, TT_Elem_Poison },
-    { 4, "Adamantoise",    {4, 5, 5, 6}, TT_Elem_Earth },
-    { 4, "Hexadragon",     {7, 5, 4, 3}, TT_Elem_Fire },
+    { 4, "Turtapod",       { 2, 3, 6, 7 },      TT_Elem_None },
+    { 4, "Vysage",         { 6, 5, 4, 5 },      TT_Elem_None },
+    { 4, "T-Rexaur",       { 4, 6, 2, 7 },      TT_Elem_None },
+    { 4, "Bomb",           { 2, 7, 6, 3 },      TT_Elem_Fire },
+    { 4, "Blitz",          { 1, 6, 4, 7 },      TT_Elem_Lightning },
+    { 4, "Wendigo",        { 7, 3, 1, 6 },      TT_Elem_None },
+    { 4, "Torama",         { 7, 4, 4, 4 },      TT_Elem_None },
+    { 4, "Imp",            { 3, 7, 3, 6 },      TT_Elem_None },
+    { 4, "Blue Dragon",    { 6, 2, 7, 3 },      TT_Elem_Poison },
+    { 4, "Adamantoise",    { 4, 5, 5, 6 },      TT_Elem_Earth },
+    { 4, "Hexadragon",     { 7, 5, 4, 3 },      TT_Elem_Fire },
 
 // Level 5
-    { 5, "Iron Giant",     {6, 5, 6, 5},   TT_Elem_None },
-    { 5, "Behemoth",       {3, 6, 5, 7},   TT_Elem_None },
-    { 5, "Chimera",        {7, 6, 5, 3},   TT_Elem_Water },
-    { 5, "PuPu",           {3, 0xA, 2, 1}, TT_Elem_None },
-    { 5, "Elastoid",       {6, 2, 6, 2},   TT_Elem_None },
-    { 5, "GIM47N",         {5, 5, 7, 4},   TT_Elem_None },
-    { 5, "Marlboro",       {7, 7, 4, 2},   TT_Elem_Poison },
-    { 5, "Ruby Dragon",    {7, 2, 7, 4},   TT_Elem_Fire },
-    { 5, "Elnoyle",        {5, 3, 7, 6},   TT_Elem_None },
-    { 5, "Tonberry King",  {4, 6, 7, 4},   TT_Elem_None },
-    { 5, "BiggsWedge",     {6, 6, 2, 7},   TT_Elem_None },
+    { 5, "Iron Giant",     { 6, 5, 6, 5 },      TT_Elem_None },
+    { 5, "Behemoth",       { 3, 6, 5, 7 },      TT_Elem_None },
+    { 5, "Chimera",        { 7, 6, 5, 3 },      TT_Elem_Water },
+    { 5, "PuPu",           { 3, 0xA, 2, 1 },    TT_Elem_None },
+    { 5, "Elastoid",       { 6, 2, 6, 2 },      TT_Elem_None },
+    { 5, "GIM47N",         { 5, 5, 7, 4 },      TT_Elem_None },
+    { 5, "Marlboro",       { 7, 7, 4, 2 },      TT_Elem_Poison },
+    { 5, "Ruby Dragon",    { 7, 2, 7, 4 },      TT_Elem_Fire },
+    { 5, "Elnoyle",        { 5, 3, 7, 6 },      TT_Elem_None },
+    { 5, "Tonberry King",  { 4, 6, 7, 4 },      TT_Elem_None },
+    { 5, "BiggsWedge",     { 6, 6, 2, 7 },      TT_Elem_None },
+
+// Level 6
+    { 6, "Fujin Raijin",   { 2, 8, 8, 4 },      TT_Elem_None },
+    { 6, "Elvoret",        { 7, 8, 3, 4 },      TT_Elem_Wind },
+    { 6, "X-ATM092",       { 4, 8, 7, 3 },      TT_Elem_None },
+    { 6, "Granaldo",       { 7, 1, 8, 5 },      TT_Elem_None },
+    { 6, "Gerogero",       { 1, 8, 8, 3 },      TT_Elem_Poison },
+    { 6, "Iguion",         { 8, 2, 8, 2 },      TT_Elem_None },
+    { 6, "Abadon",         { 6, 8, 4, 5 },      TT_Elem_None },
+    { 6, "Trauma",         { 4, 8, 5, 6 },      TT_Elem_None },
+    { 6, "Oilboyle",       { 1, 8, 4, 8 },      TT_Elem_None },
+    { 6, "NORG",           { 6, 5, 8, 4 },      TT_Elem_None },
+    { 6, "Krysta",         { 7, 5, 8, 1 },      TT_Elem_None },
+
+// Level 7
+    { 7, "Propagator",      { 8, 4, 4, 4 },     TT_Elem_None },
+    { 7, "Jumbo Cactuar",   { 8, 8, 4, 4 },     TT_Elem_Wind },
+    { 7, "Tri-Point",       { 8, 5, 2, 8 },     TT_Elem_None },
+    { 7, "Gargantua",       { 5, 6, 6, 8 },     TT_Elem_None },
+    { 7, "Mobile Type 8",   { 8, 6, 7, 3 },     TT_Elem_Poison },
+    { 7, "Sphinxara",       { 8, 3, 5, 8 },     TT_Elem_None },
+    { 7, "Tiamat",          { 8, 8, 5, 4 },     TT_Elem_None },
+    { 7, "BGH251F2",        { 5, 7, 8, 5 },     TT_Elem_None },
+    { 7, "Red Giant",       { 6, 8, 4, 7 },     TT_Elem_None },
+    { 7, "Catoblepas",      { 1, 8, 7, 7 },     TT_Elem_None },
+    { 7, "Ultima Weapon",   { 7, 7, 2, 8 },     TT_Elem_None },
+
+// Level 8
+    { 8, "Chubby Chocobo",  { 4, 4, 8, 9 },     TT_Elem_None },
+    { 8, "Angelo",          { 9, 6, 7, 3 },     TT_Elem_None },
+    { 8, "Gilgamesh",       { 3, 7, 9, 6 },     TT_Elem_None },
+    { 8, "MiniMog",         { 9, 3, 9, 2 },     TT_Elem_None },
+    { 8, "Chicobo",         { 9, 4, 8, 4 },     TT_Elem_None },
+    { 8, "Quezacotl",       { 2, 9, 9, 4 },     TT_Elem_Lightning },
+    { 8, "Shiva",           { 6, 7, 4, 9 },     TT_Elem_Ice   },
+    { 8, "Ifrit",           { 8, 6, 2, 8 },     TT_Elem_Fire  },
+    { 8, "Siren",           { 8, 9, 6, 2 },     TT_Elem_None  },
+    { 8, "Sacred",          { 5, 1, 9, 9 },     TT_Elem_Earth },
+    { 8, "Minotaur",        { 9, 5, 2, 9 },     TT_Elem_Earth },
+
+// Level 9
+    { 9, "Carbuncle",       { 8, 4, 0xA, 4 },   TT_Elem_None },
+    { 9, "Diablos",         { 5, 0xA, 8, 3 },   TT_Elem_None },
+    { 9, "Leviathan",       { 7, 0xA, 1, 7 },   TT_Elem_None },
+    { 9, "Odin",            { 8, 0xA, 3, 5 },   TT_Elem_None },
+    { 9, "Pandemona",       { 0xA, 1, 7, 7 },   TT_Elem_None },
+    { 9, "Cerberus",        { 7, 4, 6, 0xA },   TT_Elem_Lightning },
+    { 9, "Alexander",       { 9, 0xA, 4, 2 },   TT_Elem_Holy  },
+    { 9, "Phoenix",         { 7, 2, 7, 0xA },   TT_Elem_Fire  },
+    { 9, "Bahamut",         { 0xA, 8, 2, 6 },   TT_Elem_None  },
+    { 9, "Doomtrain",       { 3, 1, 0xA, 0xA }, TT_Elem_Poison },
+    { 9, "Eden",            { 4, 4, 9, 0xA },   TT_Elem_None },
+
+// Level 10
+    { 10, "Ward",           { 0xA, 7, 2, 8 },   TT_Elem_None },
+    { 10, "Kiros",          { 6, 7, 6, 0xA },   TT_Elem_None },
+    { 10, "Laguna",         { 5, 0xA, 3, 9 },   TT_Elem_None },
+    { 10, "Selphie",        { 0xA, 8, 6, 4 },   TT_Elem_None },
+    { 10, "Quistis",        { 0xA, 1, 7, 7 },   TT_Elem_None },
+    { 10, "Irvine",         { 2, 6, 9, 0xA },   TT_Elem_None },
+    { 10, "Zell",           { 8, 5, 0xA, 6 },   TT_Elem_None },
+    { 10, "Rinoa",          { 4, 0xA, 2, 0xA }, TT_Elem_None },
+    { 10, "Edea",           { 0xA, 0xA, 3, 3 }, TT_Elem_None },
+    { 10, "Seifer",         { 6, 9, 0xA, 4 },   TT_Elem_None },
+    { 10, "Squall",         { 0xA, 4, 6, 9 },   TT_Elem_None },
 
     [0xFE] = {1, "None",     {1, 1, 1, 1}, TT_Elem_None}
 };
@@ -177,12 +242,12 @@ static void update_last_neighbors(uint8_t card_idx)
         }
     }
 
-    // printf("Neigh (%d): (U:%d, R:%d:, D:%d, L:%d)\n",
-    //     card_idx,
-    //     last_neigh_ids[TT_Pos_Up],
-    //     last_neigh_ids[TT_Pos_Right],
-    //     last_neigh_ids[TT_Pos_Down],
-    //     last_neigh_ids[TT_Pos_Left]);
+    printf("Neigh (%d): (U:%d, R:%d:, D:%d, L:%d)\n",
+        card_idx,
+        last_neigh_ids[TT_Pos_Up],
+        last_neigh_ids[TT_Pos_Right],
+        last_neigh_ids[TT_Pos_Down],
+        last_neigh_ids[TT_Pos_Left]);
 }
 
 
@@ -260,7 +325,6 @@ static void check_basic_rules(void)
             board.cards[last_neigh_ids[TT_Pos_Right]].owner = owner;
         }
     }
-
 
     if(!last_neighbour_empty(TT_Pos_Down))
     {
@@ -431,7 +495,6 @@ enum tt_error tt_place_card(enum tt_player_type player, uint8_t hand_idx, uint8_
 
     if(board.hand[player].size > 0)
     {
-
         last_card_board_idx              = board_idx;
         board.cards[board_idx].master_id = board.hand[player].ids[hand_idx];
         board.cards[board_idx].owner     = player;

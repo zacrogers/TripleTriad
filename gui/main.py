@@ -79,7 +79,7 @@ images = []
 # Setup game
 tt.init_board()
 tt.set_hand(tt.TTPlayerType.TT_PLAYER_A, [11, 12, 13, 14, 15])
-tt.set_hand(tt.TTPlayerType.TT_PLAYER_B, [16, 17, 18, 19, 20])
+tt.set_hand(tt.TTPlayerType.TT_PLAYER_B, [16, 17, 18, 75, 19])
 
 player_moves = [
     [0, 0, 0],
