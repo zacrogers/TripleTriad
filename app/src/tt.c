@@ -93,37 +93,37 @@ static void update_last_neighbors(uint8_t card_idx)
     {
         if(TTC_EMPTY_CARD_ID != board.cards[card_idx - 1].master_id)
         {
-            last_neigh_ids[TT_Pos_Left] = card_idx - 1;
+            last_neigh_ids[TT_Pos_Up] = card_idx - 1;
         }
     }
     if(col < 2)
     {
         if(TTC_EMPTY_CARD_ID != board.cards[card_idx + 1].master_id)
         {
-            last_neigh_ids[TT_Pos_Right] = card_idx + 1;
+            last_neigh_ids[TT_Pos_Down] = card_idx + 1;
         }
     }
     if(row > 0)
     {
         if(TTC_EMPTY_CARD_ID != board.cards[card_idx - TTC_N_ROWS].master_id)
         {
-            last_neigh_ids[TT_Pos_Up] = card_idx - TTC_N_ROWS;
+            last_neigh_ids[TT_Pos_Left] = card_idx - TTC_N_ROWS;
         }
     }
     if(row < 2)
     {
         if(TTC_EMPTY_CARD_ID != board.cards[card_idx + TTC_N_ROWS].master_id)
         {
-            last_neigh_ids[TT_Pos_Down] = card_idx + TTC_N_ROWS;
+            last_neigh_ids[TT_Pos_Right] = card_idx + TTC_N_ROWS;
         }
     }
 
-    // printf("Neigh (%d): (U:%d, R:%d:, D:%d, L:%d)\n",
-    //     card_idx,
-    //     last_neigh_ids[TT_Pos_Up],
-    //     last_neigh_ids[TT_Pos_Right],
-    //     last_neigh_ids[TT_Pos_Down],
-    //     last_neigh_ids[TT_Pos_Left]);
+    printf("Neigh (%d): (U:%d, R:%d:, D:%d, L:%d)\n",
+        card_idx,
+        last_neigh_ids[TT_Pos_Up],
+        last_neigh_ids[TT_Pos_Right],
+        last_neigh_ids[TT_Pos_Down],
+        last_neigh_ids[TT_Pos_Left]);
 }
 
 
@@ -172,32 +172,48 @@ static bool rule_active(enum tt_rules rule)
 
 static void update_board_state(void)
 {
-    const struct tt_card last_card  = card_master_list[last_card_board_idx];
+    const struct tt_card last_card  = card_master_list[board.cards[last_card_board_idx].master_id];
     const enum tt_player_type owner = board.cards[last_card_board_idx].owner;
 
-    const struct tt_card* cmp_up    = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Up]].master_id];
-    const struct tt_card* cmp_right = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Right]].master_id];
-    const struct tt_card* cmp_down  = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Down]].master_id];
-    const struct tt_card* cmp_left  = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Left]].master_id];
-
-    if(last_card.values[TT_Pos_Up] > cmp_up->values[TT_Pos_Down])
+    if(last_neigh_ids[TT_Pos_Up] != TTC_EMPTY_CARD_ID)
     {
-        board.cards[last_neigh_ids[TT_Pos_Up]].owner = owner;
+        uint8_t up_id = board.cards[last_neigh_ids[TT_Pos_Up]].master_id;
+        const struct tt_card* cmp_up    = &card_master_list[up_id];
+
+        if((last_card.values[TT_Pos_Up] > cmp_up->values[TT_Pos_Down]))
+        {
+            board.cards[last_neigh_ids[TT_Pos_Up]].owner = owner;
+        }
     }
 
-    if(last_card.values[TT_Pos_Right] > cmp_right->values[TT_Pos_Left])
+    if(last_neigh_ids[TT_Pos_Right] != TTC_EMPTY_CARD_ID)
     {
-        board.cards[last_neigh_ids[TT_Pos_Right]].owner = owner;
+        const struct tt_card* cmp_right = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Right]].master_id];
+
+        if(last_card.values[TT_Pos_Right] > cmp_right->values[TT_Pos_Left])
+        {
+            board.cards[last_neigh_ids[TT_Pos_Right]].owner = owner;
+        }
     }
 
-    if(last_card.values[TT_Pos_Down] > cmp_down->values[TT_Pos_Up])
+
+    if(last_neigh_ids[TT_Pos_Down] != TTC_EMPTY_CARD_ID)
     {
-        board.cards[last_neigh_ids[TT_Pos_Down]].owner = owner;
+        const struct tt_card* cmp_down  = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Down]].master_id];
+        if(last_card.values[TT_Pos_Down] > cmp_down->values[TT_Pos_Up])
+        {
+            board.cards[last_neigh_ids[TT_Pos_Down]].owner = owner;
+        }
     }
 
-    if(last_card.values[TT_Pos_Left] > cmp_left->values[TT_Pos_Right])
+    if(last_neigh_ids[TT_Pos_Left] != TTC_EMPTY_CARD_ID)
     {
-        board.cards[last_neigh_ids[TT_Pos_Left]].owner = owner;
+        const struct tt_card* cmp_left  = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Left]].master_id];
+
+        if(last_card.values[TT_Pos_Left] > cmp_left->values[TT_Pos_Right])
+        {
+            board.cards[last_neigh_ids[TT_Pos_Left]].owner = owner;
+        }
     }
 
     update_score();

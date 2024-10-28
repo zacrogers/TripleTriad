@@ -127,3 +127,20 @@ const uint8_t*         tt_get_hand(enum tt_player_type player, uint8_t* size);
 
 
 #endif /* TT_H_ */
+
+
+/*
+
+
+-------------
+|   |   |   |
+-------------
+|   |   |   |
+-------------
+|   |   |   |
+-------------
+
+
+
+
+*/

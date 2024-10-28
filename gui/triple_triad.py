@@ -34,15 +34,20 @@ lib.tt_set_hand.restype = None  # Function returns void
 
 
 def get_card_name(card_index: int):
-    return lib.tt_get_card_name(card_index).decode("utf-8")
+    return lib.tt_get_card_name(card_index).decode("utf-8").replace(" ", "").replace("-", "")
+
 
 def init_board():
     lib.tt_board_init()
+
+def update_game():
+    return lib.tt_update_game()
 
 def get_state():
     state = lib.tt_board_state_json()
     state_j = json.loads(state)
     return state_j
+
 
 def set_hand(player: TTPlayerType, hand: list[int]):
     lib.tt_set_hand(player, (ctypes.c_uint8 * 5)(*hand[:5]))
