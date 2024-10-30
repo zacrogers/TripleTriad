@@ -1,11 +1,11 @@
-# import ctypes
-# from pprint import pprint
-# import json
+import sys
+import os
+import json
+import pygame
+from pprint import pprint
 
 import triple_triad as tt
 
-import pygame
-import sys
 clock = pygame.time.Clock()
 # Initialize Pygame
 pygame.init()
@@ -73,7 +73,18 @@ def draw_side_column(x, card_names, card_owner):
         y = MARGIN + i * (CARD_HEIGHT + SIDE_SLOT_SPACING)
         draw_card(card_names[i], card_owner, x, y)
 
-images = []
+
+script_dir = os.path.dirname(os.path.abspath(__file__))
+SIM_MOVES_FILENAME=os.path.join(script_dir, "sim_data.json")
+
+sim_data = None
+def load_moves(fname):
+    global sim_data
+    with open(fname, "r") as f:
+        sim_data = json.loads(f.read())
+
+load_moves(SIM_MOVES_FILENAME)
+
 
 
 # Setup game
@@ -97,16 +108,23 @@ enemy_moves = [
     [0, 2, 2]
 ]
 
-moves = [
-    player_moves,
-    enemy_moves
-]
+# moves = [
+#     player_moves,
+#     enemy_moves
+# ]
 
-MAX_MOVES = 5
+MAX_TURNS = 5
+curr_turn = 0
+MAX_MOVES = (MAX_TURNS * 2)
 curr_move = 0
 
-def load_moves():
-    ...
+print(f"{sim_data["expectedOutput"][curr_move]["turn"]}")
+
+
+moves         = [sim_data["movesA"], sim_data["movesB"]]
+p1_hand_names = [tt.get_card_name(card_id) for card_id in sim_data["handA"]]
+p2_hand_names = [tt.get_card_name(card_id) for card_id in sim_data["handB"]]
+
 
 # Main loop
 running = True
@@ -117,9 +135,8 @@ while running:
             sys.exit()
 
     s = tt.get_state()
-    p1_hand_names     = [tt.get_card_name(c_id) for c_id in s.get("handA")]
-    p2_hand_names     = [tt.get_card_name(c_id) for c_id in s.get("handB")]
-    board_card_names  = [tt.get_card_name(c_id.get("id")) for c_id in s.get("board")]
+
+    board_card_names  = [tt.get_card_name(card_id.get("id")) for card_id in s.get("board")]
     board_card_owners = [c.get("o") for c in s.get("board")]
     curr_player       = s.get("turn")
 
@@ -131,21 +148,24 @@ while running:
     draw_grid(board_card_names, board_card_owners)
     draw_side_column(RIGHT_COLUMN_X, p2_hand_names, 1)
 
+    # assert(curr_player == moves["expectedOutput"][curr_move]["turn"])
+
     err = tt.place_card(
         curr_player,
-        moves[curr_player][curr_move][0],
-        moves[curr_player][curr_move][1],
-        moves[curr_player][curr_move][2]
+        moves[curr_player][curr_turn][0],
+        moves[curr_player][curr_turn][1],
+        moves[curr_player][curr_turn][2]
     )
 
     if not tt.update_game():
         print("nah")
         # exit(0)
 
+    curr_turn += 1
     curr_move += 1
 
-    if curr_move >= MAX_MOVES:
-        curr_move = 0
+    if curr_turn >= MAX_TURNS:
+        curr_turn = 0
 
     # Update the display
     pygame.display.flip()
