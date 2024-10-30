@@ -30,7 +30,7 @@ enum tt_error {
 
 
 enum tt_game_state {
-    StateSelectHand,
+    StateSelectHand = 0,
     StateStartMatch,
     StatePlayerTurn,
     StateOpponentTurn,
@@ -46,7 +46,7 @@ enum tt_player_type {
 
 
 enum tt_elem_type {
-    TT_Elem_Earth,
+    TT_Elem_Earth = 0,
     TT_Elem_Fire,
     TT_Elem_Water,
     TT_Elem_Poison,

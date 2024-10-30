@@ -185,7 +185,7 @@ static void remove_card_from_hand(uint8_t *array, size_t length, size_t index)
 {
     if (index >= length)
     {
-        printf("Index out of bounds\n");
+        // printf("Index out of bounds\n");
         return;
     }
 
@@ -210,44 +210,44 @@ static void update_last_neighbors(uint8_t card_idx)
     // Set all neighs to empty
     memset(last_neigh_ids, TTC_EMPTY_CARD_ID, TT_Pos_Count);
 
-    const uint8_t col = card_idx % TTC_N_COLS;
-    const uint8_t row = card_idx / TTC_N_COLS;
+    const uint8_t row = card_idx % TTC_N_COLS;
+    const uint8_t col = card_idx / TTC_N_COLS;
 
-    if(col > 0)
+    if(row > 0)
     {
         if(!board_slot_empty(card_idx - 1))
         {
             last_neigh_ids[TT_Pos_Up] = card_idx - 1;
         }
     }
-    if(col < 2)
+    if(row < 2)
     {
         if(!board_slot_empty(card_idx + 1))
         {
             last_neigh_ids[TT_Pos_Down] = card_idx + 1;
         }
     }
-    if(row > 0)
+    if(col > 0)
     {
-        if(!board_slot_empty(card_idx - TTC_N_ROWS))
+        if(!board_slot_empty(card_idx - TTC_N_COLS))
         {
-            last_neigh_ids[TT_Pos_Left] = card_idx - TTC_N_ROWS;
+            last_neigh_ids[TT_Pos_Left] = card_idx - TTC_N_COLS;
         }
     }
-    if(row < 2)
+    if(col < 2)
     {
-        if(!board_slot_empty(card_idx + TTC_N_ROWS))
+        if(!board_slot_empty(card_idx + TTC_N_COLS))
         {
-            last_neigh_ids[TT_Pos_Right] = card_idx + TTC_N_ROWS;
+            last_neigh_ids[TT_Pos_Right] = card_idx + TTC_N_COLS;
         }
     }
 
-    printf("Neigh (%d): (U:%d, R:%d:, D:%d, L:%d)\n",
-        card_idx,
-        last_neigh_ids[TT_Pos_Up],
-        last_neigh_ids[TT_Pos_Right],
-        last_neigh_ids[TT_Pos_Down],
-        last_neigh_ids[TT_Pos_Left]);
+    // printf("Neigh (%d): (U:%d, R:%d:, D:%d, L:%d)\n",
+    //     card_idx,
+    //     last_neigh_ids[TT_Pos_Up],
+    //     last_neigh_ids[TT_Pos_Right],
+    //     last_neigh_ids[TT_Pos_Down],
+    //     last_neigh_ids[TT_Pos_Left]);
 }
 
 
