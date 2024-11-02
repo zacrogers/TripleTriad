@@ -11,7 +11,7 @@ done
 if [ $wrapper == "python" ]; then
     cmake -S app -B build
     make -C build
-    .venv/bin/python gui/main.py
+    .venv/bin/python gui/triple_triad.py
     exit 1
 elif [ $wrapper == "c" ]; then
     cmake -S app -B build
