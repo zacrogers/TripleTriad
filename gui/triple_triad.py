@@ -99,6 +99,9 @@ class TripleTriadGame:
         else:
             pygame.draw.rect(self.screen, 0xFFFFFF, [x-pad, y-pad, CARD_WIDTH+(pad*2), CARD_HEIGHT+(pad*2)])
 
+        if selected:
+            pygame.draw.rect(self.screen, 0x00FF00, [x-pad, y-pad, CARD_WIDTH+(pad*2), CARD_HEIGHT+(pad*2)])
+
         self.screen.blit(card_image, (x, y))
 
 
@@ -116,12 +119,15 @@ class TripleTriadGame:
             r += 1
 
 
-    def draw_side_column(self, x, card_names, card_owner):
+    def draw_side_column(self, x, card_names, card_owner, selected_idx=-1):
         """Draw a side column with 5 card slots."""
         for i in range(5):
             y = MARGIN + i * (CARD_HEIGHT + SIDE_SLOT_SPACING)
-            self.draw_card(card_names[i], card_owner, x, y)
+            self.draw_card(card_names[i], card_owner, x, y, i == selected_idx)
 
+
+    def handle_input(self):
+        ...
 
     def run(self):
         # Main loop
@@ -144,7 +150,7 @@ class TripleTriadGame:
             # Draw the left column, center grid, and right column with PNGs
             self.draw_side_column(LEFT_COLUMN_X, self.p1_hand_names, 0)
             self.draw_grid(board_card_names, board_card_owners)
-            self.draw_side_column(RIGHT_COLUMN_X, self.p2_hand_names, 1)
+            self.draw_side_column(RIGHT_COLUMN_X, self.p2_hand_names, 1, selected_idx=self.hand_selected_index)
 
             # assert(curr_player == sim_data["expectedOutput"][curr_move]["turn"])
             print(f"asdsda: {curr_player}, {self.sim_data["expectedOutput"][self.curr_turn]["turn"]}")
