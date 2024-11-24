@@ -3,6 +3,7 @@
 #include <string.h>
 #include <assert.h>
 
+// Convert the xy 3x3 grid coordinates to a 0 -> 8 index
 #define XY_TO_I(x, y) (y * TTC_N_COLS + x)
 
 static struct tt_board board = { 0 };
@@ -16,7 +17,8 @@ static uint8_t         last_neigh_ids[TT_Pos_Count];
 // Set true if a card has been added to the board and need to be checked against the rules
 static bool            check_pending = false;
 
-static const struct tt_card card_master_list[0xFF] = {
+#define MASTER_LIST_SIZE 0xFF
+static const struct tt_card card_master_list[MASTER_LIST_SIZE] = {
 // Level 1
     { 1, "Geezard",        { 1, 4, 1, 5 },      TT_Elem_None },
     { 1, "Funguar",        { 5, 1, 1, 3 },      TT_Elem_None },
@@ -149,6 +151,8 @@ static const struct tt_card card_master_list[0xFF] = {
 
     [0xFE] = {1, "None",     {1, 1, 1, 1}, TT_Elem_None}
 };
+
+
 
 
 /* Static functions */
@@ -299,49 +303,30 @@ static bool last_neighbour_empty(enum tt_card_pos pos)
     return (TTC_EMPTY_CARD_ID == last_neigh_ids[pos]);
 }
 
+static const enum tt_card_pos neighbour_map[TT_Pos_Count] = {
+    [TT_Pos_Up]    = TT_Pos_Down,
+    [TT_Pos_Right] = TT_Pos_Left,
+    [TT_Pos_Down]  = TT_Pos_Up,
+    [TT_Pos_Left]  = TT_Pos_Right
+};
+
 
 static void check_basic_rules(void)
 {
     const struct tt_card last_card  = card_master_list[board.cards[last_card_board_idx].master_id];
     const enum tt_player_type owner = board.cards[last_card_board_idx].owner;
 
-    if(!last_neighbour_empty(TT_Pos_Up))
+    for(size_t pos = TT_Pos_Up; pos < TT_Pos_Count; ++pos)
     {
-        uint8_t up_id = board.cards[last_neigh_ids[TT_Pos_Up]].master_id;
-        const struct tt_card* cmp_up    = &card_master_list[up_id];
-
-        if((last_card.values[TT_Pos_Up] > cmp_up->values[TT_Pos_Down]))
+        if(!last_neighbour_empty(pos))
         {
-            board.cards[last_neigh_ids[TT_Pos_Up]].owner = owner;
-        }
-    }
+            const uint8_t          neigh_id   = board.cards[last_neigh_ids[pos]].master_id;
+            const struct tt_card*  neigh_card = &card_master_list[neigh_id];
 
-    if(!last_neighbour_empty(TT_Pos_Right))
-    {
-        const struct tt_card* cmp_right = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Right]].master_id];
-
-        if(last_card.values[TT_Pos_Right] > cmp_right->values[TT_Pos_Left])
-        {
-            board.cards[last_neigh_ids[TT_Pos_Right]].owner = owner;
-        }
-    }
-
-    if(!last_neighbour_empty(TT_Pos_Down))
-    {
-        const struct tt_card* cmp_down  = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Down]].master_id];
-        if(last_card.values[TT_Pos_Down] > cmp_down->values[TT_Pos_Up])
-        {
-            board.cards[last_neigh_ids[TT_Pos_Down]].owner = owner;
-        }
-    }
-
-    if(!last_neighbour_empty(TT_Pos_Left))
-    {
-        const struct tt_card* cmp_left  = &card_master_list[board.cards[last_neigh_ids[TT_Pos_Left]].master_id];
-
-        if(last_card.values[TT_Pos_Left] > cmp_left->values[TT_Pos_Right])
-        {
-            board.cards[last_neigh_ids[TT_Pos_Left]].owner = owner;
+            if((last_card.values[pos] > neigh_card->values[neighbour_map[pos]]))
+            {
+                board.cards[last_neigh_ids[pos]].owner = owner;
+            }
         }
     }
 }
@@ -385,7 +370,6 @@ const struct tt_board* tt_board_state(void)
     memcpy(&_board, &board, sizeof(struct tt_board));
     return &_board;
 }
-
 
 const char* tt_board_state_json(void)
 {
@@ -455,7 +439,7 @@ bool tt_update_game(void)
 
 const char* tt_get_card_name(uint8_t card_index)
 {
-    if(card_index > (sizeof(card_master_list) / sizeof card_master_list[0]))
+    if(card_index > MASTER_LIST_SIZE)
     {
         return card_master_list[TTC_EMPTY_CARD_ID].name;
     }
@@ -465,7 +449,7 @@ const char* tt_get_card_name(uint8_t card_index)
 
 const struct tt_card* tt_get_card(uint8_t card_index)
 {
-    if(card_index > (sizeof(card_master_list) / sizeof card_master_list[0]))
+    if(card_index > MASTER_LIST_SIZE)
     {
         return NULL;
     }

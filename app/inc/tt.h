@@ -75,10 +75,10 @@ typedef uint16_t rule_bitmask_t;
 
 // For tracking neighs, and also card val locations
 enum tt_card_pos {
-    TT_Pos_Up,
-    TT_Pos_Right,
-    TT_Pos_Down,
-    TT_Pos_Left,
+    TT_Pos_Up = 0,
+    TT_Pos_Right = 1,
+    TT_Pos_Down = 2,
+    TT_Pos_Left = 3,
     TT_Pos_Count
 };
 
