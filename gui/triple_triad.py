@@ -51,6 +51,7 @@ class TripleTriadGame:
         self.curr_move = 0
 
         self.sim_data = None
+
         if self.load_sim_data():
             print("Loaded sim data")
             self.moves         = [self.sim_data["movesA"], self.sim_data["movesB"]]
@@ -81,6 +82,27 @@ class TripleTriadGame:
             return True
 
         return False
+
+
+    def update_controls(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    print("Up key pressed")
+                elif event.key == pygame.K_DOWN:
+                    print("Down key pressed")
+                elif event.key == pygame.K_LEFT:
+                    print("Left key pressed")
+                elif event.key == pygame.K_RIGHT:
+                    print("Right key pressed")
+                elif event.key == pygame.K_RETURN:
+                    print("Enter key pressed")
+                elif event.key == pygame.K_BACKSPACE:
+                    print("Backspace key pressed")
 
 
     '''
@@ -129,14 +151,12 @@ class TripleTriadGame:
     def handle_input(self):
         ...
 
+
     def run(self):
         # Main loop
         running = True
         while running:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+            self.update_controls()
 
             s = TripleTriadCore.get_state()
 

@@ -13,6 +13,7 @@ enum tt_constants {
     TTC_MAX_HAND_SIZE  = 5,
     TTC_EMPTY_CARD_ID  = 0xFE
 };
+
 #define TTC_BOARD_SIZE (TTC_N_ROWS * TTC_N_COLS)
 
 
@@ -90,16 +91,18 @@ struct tt_card {
     const enum tt_elem_type elem;
 };
 
+typedef uint8_t tt_card_id; // the index of the card in the master list
 
 struct tt_hand {
-    uint8_t ids[TTC_MAX_HAND_SIZE];
-    uint8_t size;
+    tt_card_id ids[TTC_MAX_HAND_SIZE];
+    uint8_t    size;
 };
+
 
 
 struct tt_card_cell {
     enum tt_player_type owner;
-    uint8_t             master_id;
+    tt_card_id          master_id;
     enum tt_elem_type   elem;
 };
 
@@ -124,13 +127,13 @@ const struct tt_board* tt_board_state(void);
 const char*            tt_board_state_json(void);
 bool                   tt_update_game(void);
 
-const char*            tt_get_card_name(uint8_t card_index);
-const struct tt_card*  tt_get_card(uint8_t card_index);
+const char*            tt_get_card_name(tt_card_id card_id);
+const struct tt_card*  tt_get_card(tt_card_id card_id);
 enum tt_error          tt_place_card(enum tt_player_type player, uint8_t hand_idx, uint8_t board_x, uint8_t board_y);
 
 const struct tt_card*  tt_get_player_cards(enum tt_player_type player);
-void                   tt_set_hand(enum tt_player_type player, const uint8_t idxs[TTC_MAX_HAND_SIZE]);
-const uint8_t*         tt_get_hand(enum tt_player_type player, uint8_t* size);
+void                   tt_set_hand(enum tt_player_type player, const tt_card_id hand_card_ids[TTC_MAX_HAND_SIZE]);
+const tt_card_id*      tt_get_hand(enum tt_player_type player, uint8_t* size);
 
 
 #endif /* TT_H_ */

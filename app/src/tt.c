@@ -17,7 +17,7 @@ static uint8_t         last_neigh_ids[TT_Pos_Count];
 // Set true if a card has been added to the board and need to be checked against the rules
 static bool            check_pending = false;
 
-#define MASTER_LIST_SIZE 0xFF
+#define MASTER_LIST_SIZE (tt_card_id)0xFF
 static const struct tt_card card_master_list[MASTER_LIST_SIZE] = {
 // Level 1
     { 1, "Geezard",        { 1, 4, 1, 5 },      TT_Elem_None },
@@ -174,9 +174,9 @@ static char player_type_to_char(enum tt_player_type p)
 static uint8_t n_cards_on_board_for_owner(enum tt_player_type owner)
 {
     uint8_t count = 0;
-    for(uint8_t i = 0; i < TTC_BOARD_SIZE; ++i)
+    for(uint8_t board_pos = 0; board_pos < TTC_BOARD_SIZE; ++board_pos)
     {
-        if(owner == board.cards[i].owner)
+        if(owner == board.cards[board_pos].owner)
         {
             count++;
         }
@@ -185,7 +185,7 @@ static uint8_t n_cards_on_board_for_owner(enum tt_player_type owner)
 }
 
 
-static void remove_card_from_hand(uint8_t *array, size_t length, size_t index)
+static void remove_card_from_hand(tt_card_id *array, size_t length, size_t index)
 {
     if (index >= length)
     {
@@ -265,6 +265,7 @@ static void toggle_player_turn(void)
     {
         board.player_turn = TT_PLAYER_A;
     }
+    // Player none should only be used for card ownership
     assert(board.player_turn != TT_PLAYER_NONE);
 }
 
@@ -281,9 +282,9 @@ static void update_score(void)
 
 static bool game_over(void)
 {
-    for(uint8_t i = 0; i < TTC_BOARD_SIZE; ++i)
+    for(uint8_t board_pos = 0; board_pos < TTC_BOARD_SIZE; ++board_pos)
     {
-        if(TTC_EMPTY_CARD_ID == board.cards[i].master_id)
+        if(TTC_EMPTY_CARD_ID == board.cards[board_pos].master_id)
         {
             return false;
         }
@@ -298,7 +299,7 @@ static bool rule_active(enum tt_rules rule)
 }
 
 
-static bool last_neighbour_empty(enum tt_card_pos pos)
+static inline bool last_neighbour_empty(enum tt_card_pos pos)
 {
     return (TTC_EMPTY_CARD_ID == last_neigh_ids[pos]);
 }
@@ -314,18 +315,17 @@ static const enum tt_card_pos neighbour_map[TT_Pos_Count] = {
 static void check_basic_rules(void)
 {
     const struct tt_card last_card  = card_master_list[board.cards[last_card_board_idx].master_id];
-    const enum tt_player_type owner = board.cards[last_card_board_idx].owner;
 
-    for(size_t pos = TT_Pos_Up; pos < TT_Pos_Count; ++pos)
+    for(size_t neigh_pos = TT_Pos_Up; neigh_pos < TT_Pos_Count; ++neigh_pos)
     {
-        if(!last_neighbour_empty(pos))
+        if(!last_neighbour_empty(neigh_pos))
         {
-            const uint8_t          neigh_id   = board.cards[last_neigh_ids[pos]].master_id;
+            const uint8_t          neigh_id   = board.cards[last_neigh_ids[neigh_pos]].master_id;
             const struct tt_card*  neigh_card = &card_master_list[neigh_id];
 
-            if((last_card.values[pos] > neigh_card->values[neighbour_map[pos]]))
+            if((last_card.values[neigh_pos] > neigh_card->values[neighbour_map[neigh_pos]]))
             {
-                board.cards[last_neigh_ids[pos]].owner = owner;
+                board.cards[last_neigh_ids[neigh_pos]].owner = board.cards[last_card_board_idx].owner;
             }
         }
     }
@@ -356,10 +356,10 @@ void tt_board_init(enum tt_player_type start_player, rule_bitmask_t rule_bitmask
     board.player_turn = start_player;
     board.rules       = rule_bitmask;
 
-    for(uint8_t i = 0; i < TTC_BOARD_SIZE; ++i)
+    for(uint8_t board_pos = 0; board_pos < TTC_BOARD_SIZE; ++board_pos)
     {
-        board.cards[i].master_id = TTC_EMPTY_CARD_ID;
-        board.cards[i].owner     = TT_PLAYER_NONE;
+        board.cards[board_pos].master_id = TTC_EMPTY_CARD_ID;
+        board.cards[board_pos].owner     = TT_PLAYER_NONE;
     }
 }
 
@@ -437,23 +437,23 @@ bool tt_update_game(void)
 }
 
 
-const char* tt_get_card_name(uint8_t card_index)
+const char* tt_get_card_name(tt_card_id card_id)
 {
-    if(card_index > MASTER_LIST_SIZE)
+    if(card_id > MASTER_LIST_SIZE)
     {
         return card_master_list[TTC_EMPTY_CARD_ID].name;
     }
-    return card_master_list[card_index].name;
+    return card_master_list[card_id].name;
 }
 
 
-const struct tt_card* tt_get_card(uint8_t card_index)
+const struct tt_card* tt_get_card(tt_card_id card_id)
 {
-    if(card_index > MASTER_LIST_SIZE)
+    if(card_id > MASTER_LIST_SIZE)
     {
         return NULL;
     }
-    return &card_master_list[card_index];
+    return &card_master_list[card_id];
 }
 
 
@@ -490,6 +490,10 @@ enum tt_error tt_place_card(enum tt_player_type player, uint8_t hand_idx, uint8_
         check_pending = true;
         return TT_Err_Ok;
     }
+    else if (board.hand[player].size == 0)
+    {
+        return TT_Err_Hand_Empty;
+    }
 
     return TT_Err_Unknown;
 }
@@ -501,17 +505,17 @@ const struct tt_card* tt_get_player_cards(enum tt_player_type player)
 }
 
 
-void tt_set_hand(enum tt_player_type player, const uint8_t idxs[TTC_MAX_HAND_SIZE])
+void tt_set_hand(enum tt_player_type player, const tt_card_id hand_card_ids[TTC_MAX_HAND_SIZE])
 {
-    for(uint8_t i = 0; i < TTC_MAX_HAND_SIZE; ++i)
+    for(uint8_t hand_pos = 0; hand_pos < TTC_MAX_HAND_SIZE; ++hand_pos)
     {
-        board.hand[player].ids[i] = idxs[i];
+        board.hand[player].ids[hand_pos] = hand_card_ids[hand_pos];
     }
     board.hand[player].size = TTC_MAX_HAND_SIZE;
 }
 
 
-const uint8_t* tt_get_hand(enum tt_player_type player, uint8_t* size)
+const tt_card_id* tt_get_hand(enum tt_player_type player, uint8_t* size)
 {
     if(board.hand[player].size > TTC_MAX_HAND_SIZE)
     {
