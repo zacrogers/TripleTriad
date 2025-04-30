@@ -3,8 +3,8 @@
 The card game from Final Fantasy 8. The core logic of the game has been written in C to make it easy to embed where C is easy to embed. Currently only python is implemented.
 
 
-To run with the pytho wrapper: ```bash run/sh -w python```
-To run the C demo simulation ```bash run/sh -w c```
+To run with the python wrapper: ```bash run.sh -w python```
+To run the C demo simulation ```bash run.sh -w c```
 
 
 Future ideas:
